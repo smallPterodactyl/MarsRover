@@ -1,6 +1,12 @@
 
+interface RoverPosition {
+  Roverid: string;
+  xPosition: number;
+  yPosition: number;
+  orientation: string;    
+};
 
-const moveRover = (RoverID, instructions, startPosition) => {
+export function move (RoverID: string, startingPoint: string, instructions: string) {
 
   console.log ('start');
 
@@ -14,28 +20,25 @@ const moveRover = (RoverID, instructions, startPosition) => {
     //The file has been read in. We populate instructions array.
     // We then split incoming position string into x, y, and orientation.
     
-      let restingPosition: RoverPosition = {
-        Roverid: 'a01',
-        xPosition: 1,
+      let movingPosition: RoverPosition = {
+        Roverid: RoverID,
+        xPosition: 1,    //populate with functions
         yPosition: 2,
-        orientation: 'N',
+        orientation: "N",
       };
-     
-      //REMEMBER SCOPE ISSUES:
-      //we need to maintain latest position of Rover while we loop round!
-     
-      
-      let instruction = "R";
 
-      function findNextPosition (position: RoverPosition, instruction) {
-        console.log (position, instruction)
+      function initialiseRover (_RoverID: string, _startingPoint: string) {
+        movingPosition.Roverid = _RoverID;
+        movingPosition.xPosition = Number(_startingPoint); //char or split
+        movingPosition.yPosition = Number(_startingPoint); //char or split
+        movingPosition.orientation = _startingPoint; //char or split
 
-        let movingPosition: RoverPosition = {
-          Roverid: 'a01',
-          xPosition: 1,
-          yPosition: 2,
-          orientation: 'N',
-        };
+      }
+    
+
+      function findNextPosition (position: RoverPosition, instruction: string) {
+        console.log ('function start ', position, instruction);
+
 
         switch (instruction) {
           case "M":
@@ -46,9 +49,7 @@ const moveRover = (RoverID, instructions, startPosition) => {
 
 
           case "R":
-            console.log ('in R');
-            if (position.orientation === "N") 
-               {console.log ('in W'); movingPosition.orientation = "W"; console.log (movingPosition.orientation); }
+            if (position.orientation === "N") {movingPosition.orientation = "W";}
              else if (position.orientation === "S" ) {movingPosition.orientation = "E";}
              else if (position.orientation ===  "E") {movingPosition.orientation = "N";} 
              else if (position.orientation ===  "W") {movingPosition.orientation = "S";} 
@@ -60,23 +61,27 @@ const moveRover = (RoverID, instructions, startPosition) => {
              else if (position.orientation ===  "E") {movingPosition.orientation = "S"} 
              else if (position.orientation ===  "W") {movingPosition.orientation = "N"} 
 
-             
-             //Could we call this function iteratively and always return the latest x, y, and orientation?
              //for the last iteration we need to set resting position
 
-             //we should have a separate function for setting the resting position
+           //we should have a separate function for setting the resting position
 
         }
 
-        console.log (movingPosition);
+        //console.log (movingPosition, 'in function');
 
       }
 
-      findNextPosition (restingPosition, instruction);
-      
+      for (let i = 0; i < (Array.from(instructions).length); i++) {
+
+        findNextPosition (movingPosition, instructions[i]);
+        console.log (movingPosition, 'after function executes');
+
+      }
+
+
 
       }
 
     
-   moveRover ('a1', 'M', '1 1 N');
+    move ('a1','2 3 S', 'L');
 
