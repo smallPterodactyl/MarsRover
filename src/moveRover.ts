@@ -1,23 +1,26 @@
-export function move (RoverID: string, startingPoint: string, instructions: string) {
+export interface RoverPosition {
+  Roverid: string;
+  xPosition: number;
+  yPosition: number;
+  orientation: string,   
+};
 
-  console.log (RoverID, startingPoint, instructions);
+export function move (lastPosition: RoverPosition, instructions: string) {
+//export function move (RoverID: string, startingPoint: string, instructions: string) {
 
-    interface RoverPosition {
-        Roverid: string;
-        xPosition: number;
-        yPosition: number;
-        orientation: string,   
-    };
+  console.log (lastPosition, instructions);
+
 
     //The Rover is set up for initialisation
-    let restingPosition: RoverPosition = {
+   /* let restingPosition: RoverPosition = {
       Roverid: "",
       xPosition: 0,    
       yPosition: 0,
       orientation: "",
     };
+    */
 
-    initialiseRover(RoverID, startingPoint);
+   /* initialiseRover(RoverID, startingPoint);
 
     function initialiseRover (RoverID: string, startingPoint: string) {
 
@@ -27,6 +30,8 @@ export function move (RoverID: string, startingPoint: string, instructions: stri
       restingPosition.orientation = (startingPoint[2]);
 
     }
+
+    */
 
     function findNextPosition (position: RoverPosition, instruction: string) {
 
@@ -63,7 +68,7 @@ export function move (RoverID: string, startingPoint: string, instructions: stri
         }
 
         //Start the Rover from its initial position
-        let movingPosition = restingPosition;
+        let movingPosition = lastPosition;
 
         for (let i = 0; i < (Array.from(instructions).length); i++) {
 
