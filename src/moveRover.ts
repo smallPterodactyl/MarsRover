@@ -1,3 +1,7 @@
+import * as fs from 'fs';
+import { initialiseRover } from '..';
+import { clear, print, askQuestion } from '../console';
+
 export interface RoverPosition {
   Roverid: string;
   xPosition: number;
@@ -33,29 +37,52 @@ export function move (lastPosition: RoverPosition, instructions: string) {
       else if (position.orientation ===  "W") { movingPosition.orientation = "N" } 
     }  
 
-   //Pass the Rover's updated position back to the next instruction 
-   console.log ('passing back from findNext ', movingPosition)
+   //Pass back the Rover's updated position
    return movingPosition     
 
-  }
+  } //findNextPosition ends here
 
-   //Start the Rover from its initial position 
-   let movingPosition = lastPosition;    
+
+   //Start up the Rover from its initial position 
+  let movingPosition = lastPosition;    
     
   for (let i = 0; i < (Array.from(instructions).length); i++) {
-    
-     //The Rover's next coordinates are always calculated from its previous coordinates using the movingPosition interface
+
+     //The Rover's next position is calculated from its previous coordinates
     findNextPosition (movingPosition, instructions[i]);
+  }  
+    
+    //The Rover's final position is recorded and communicated
+    updateLastPosition (movingPosition);
 
-    }
-       
-    //Write final cooordinates out for unit test purposes
+    print
+      (`New position ${movingPosition.xPosition}${movingPosition.yPosition}${movingPosition.orientation} now logged for Rover ID ${movingPosition.Roverid}.\n`)
 
-    console.log ('after for', movingPosition);
-       
+      //The user can now navigate another Rover or exit.
+      askQuestion(`Enter Y to navigate another Rover or N to close and send data to Mission Control.`, restartOrStop);
+} 
+    
+  
+function updateLastPosition (position: RoverPosition) {
+
+    const finalPosition = '\n' + position.Roverid.concat(' ', position.xPosition.toString(),position.yPosition.toString(),
+    position.orientation, ' ', (Date.now()/1000).toString());
+
+    //This is horrible, non-existent error-handling: even considering this operation would never be used in the real word
+    fs.appendFileSync('./Rover_log/position_log.txt', finalPosition);
+
 }
 
 
+function restartOrStop (decision: string) {
 
+  if (decision === 'N') {
+    print (`Press Control+C to exit the program. Please activate alien spider 🕷 alarms before leaving the Control Room.`);
+  }
+  
+  else if (decision === 'Y') {initialiseRover ()}
+  
+  else ;
+    
 
-
+}
