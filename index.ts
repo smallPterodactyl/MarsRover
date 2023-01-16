@@ -31,7 +31,7 @@ export function initialiseRover(): void {
 
 	  if (validRoverID (ID) === undefined) {
 		print (`Invalid or inactive Rover ${ID} . Enter another ID.`);
-	    askQuestion(`Enter the ID of the active Rover that you wish to navigate.   `, selectRover);
+	    askQuestion(`Enter the ID of the Rover that you wish to navigate.   `, selectRover);
 
 	  }
 
@@ -53,42 +53,44 @@ export function initialiseRover(): void {
 		print
 		(`Rover ID ${lastPosition.Roverid} successfully located at ${lastPosition.xPosition}${lastPosition.yPosition}${lastPosition.orientation} .\n`)
 
-	 }
+	}
 
 
 	 //Ask the user to enter navigation instructions
-
 	 askQuestion(`Enter navigation instructions of no more than 15 characters (M, L or R).   `, inputInstructions);
 
      function  inputInstructions (userInstructions: string) {
 
-	   if (validInstructions(userInstructions) === undefined ) {
-		 print (`Invalid instructions. Please re-enter.`);
-		 askQuestion(`Enter navigation instructions of no more than 15 characters (M, L or R).   `, inputInstructions);
+	   if (validInstructions(userInstructions)) {
 
+		instructions = userInstructions;
+		move (lastPosition, instructions); 
+		 
 		}
 
 		else {	 
-		 instructions = userInstructions;
-		 move (lastPosition, instructions); 
 
-		}  
+		print (`Invalid instructions. Please re-enter.`);
+		askQuestion(`Enter navigation instructions of no more than 15 characters (M, L or R).   `, inputInstructions);
+
+	   }  
     }	
   }
 } 
 
-
 initialiseRover ();
 
 
-/*More sophisticated functionality needed to handle multiple log entries with different dates:
+/*More sophisticated functionality is needed to handle multiple log entries with different dates:
 	
- const loggedCoordinates = Array.from(RoverData).filter (coordinates => coordinates.match(matchWithID));
+The current 'match' function will only find the first instance of the Rover's location but we really
+need something like a filter or an indexed read to find all the Rover's locations by date, e.g.
+const loggedCoordinates = Array.from(RoverData).filter (coordinates => coordinates.match(matchWithID));
  lastPowerDownDate (loggedCoordinates);
 
     function lastPowerDownDate (loggedCoordinates) {
      Compare dates and pass back the coordinates with the max date
    }
- */  
+*/  
  
 

@@ -1,8 +1,9 @@
+import { isValidDNA } from '../../js_coding_exercises/challenges/exercise006';
 import { move } from './moveRover';
 
 export const activeRovers = ['a1', 'g56'] as const;
 
-const MAX_INSTR = 15;
+
 
 const plateau = {
     length: 5,
@@ -19,14 +20,14 @@ export function validRoverID (ID: string) {
 }
 
 export function validInstructions (userInstructions: string) {
-    console.log (userInstructions);
-    console.log (userInstructions.match(/^L|M|N/));
 
-   if ((userInstructions.length > MAX_INSTR) || (userInstructions === undefined) || (userInstructions.match(/^L|M|N/)))
-    {return undefined}
+    const isNotValid = /[^LMR]/i;
+    const MAX_INSTR = 15;
 
-   else {return userInstructions}  
+    //Instructions are invalid if undefined, longer than 15 characters, or contain non-L/M/R characters
    
+   return ((userInstructions.length > MAX_INSTR) || (userInstructions === undefined) || ((userInstructions).match(isNotValid)))? false : true
+ 
 }    
 
 export function coordinatesInRange () {

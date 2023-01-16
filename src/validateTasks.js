@@ -2,7 +2,6 @@
 exports.__esModule = true;
 exports.isUnoccupied = exports.coordinatesInRange = exports.validInstructions = exports.validRoverID = exports.activeRovers = void 0;
 exports.activeRovers = ['a1', 'g56'];
-var MAX_INSTR = 15;
 var plateau = {
     length: 5,
     width: 5,
@@ -14,14 +13,10 @@ function validRoverID(ID) {
 }
 exports.validRoverID = validRoverID;
 function validInstructions(userInstructions) {
-    console.log(userInstructions);
-    console.log(userInstructions.match(/^L|M|N/));
-    if ((userInstructions.length > MAX_INSTR) || (userInstructions === undefined) || (userInstructions.match(/^L|M|N/))) {
-        return undefined;
-    }
-    else {
-        return userInstructions;
-    }
+    var isNotValid = /[^LMR]/i;
+    var MAX_INSTR = 15;
+    //Instructions are invalid if undefined, longer than 15 characters, or contain non-L/M/R characters
+    return ((userInstructions.length > MAX_INSTR) || (userInstructions === undefined) || ((userInstructions).match(isNotValid))) ? false : true;
 }
 exports.validInstructions = validInstructions;
 function coordinatesInRange() {

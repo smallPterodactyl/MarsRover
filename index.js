@@ -54,25 +54,27 @@ function initialiseRover() {
         //Ask the user to enter navigation instructions
         (0, console_1.askQuestion)("Enter navigation instructions of no more than 15 characters (M, L or R).   ", inputInstructions);
         function inputInstructions(userInstructions) {
-            if ((0, validateTasks_1.validInstructions)(userInstructions) === undefined) {
-                (0, console_1.print)("Invalid instructions. Please re-enter.");
-                (0, console_1.askQuestion)("Enter navigation instructions of no more than 15 characters (M, L or R).   ", inputInstructions);
-            }
-            else {
+            if ((0, validateTasks_1.validInstructions)(userInstructions)) {
                 instructions = userInstructions;
                 (0, moveRover_js_1.move)(lastPosition, instructions);
+            }
+            else {
+                (0, console_1.print)("Invalid instructions. Please re-enter.");
+                (0, console_1.askQuestion)("Enter navigation instructions of no more than 15 characters (M, L or R).   ", inputInstructions);
             }
         }
     }
 }
 exports.initialiseRover = initialiseRover;
 initialiseRover();
-/*More sophisticated functionality needed to handle multiple log entries with different dates:
+/*More sophisticated functionality is needed to handle multiple log entries with different dates:
     
- const loggedCoordinates = Array.from(RoverData).filter (coordinates => coordinates.match(matchWithID));
+The current 'match' function will only find the first instance of the Rover's location but we really
+need something like a filter or an indexed read to find all the Rover's locations by date, e.g.
+const loggedCoordinates = Array.from(RoverData).filter (coordinates => coordinates.match(matchWithID));
  lastPowerDownDate (loggedCoordinates);
 
     function lastPowerDownDate (loggedCoordinates) {
      Compare dates and pass back the coordinates with the max date
    }
- */
+*/
