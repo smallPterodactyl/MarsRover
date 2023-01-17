@@ -10,19 +10,11 @@ export interface RoverPosition {
   orientation: string,   
 };
 
-export type coordinates = {
-  x: number;
-  y: number,
-};
-
 export function move (lastPosition: RoverPosition, instructions: string) {
 
   function findNextPosition (position: RoverPosition, instruction: string) {
 
-    let workingCoordinates: coordinates = {
-      x: position.xPosition,
-      y: position.yPosition,
-    }
+    let currentPosition = position;
 
     //Move one point along the same axis
     if (instruction === "M") {
@@ -48,19 +40,26 @@ export function move (lastPosition: RoverPosition, instructions: string) {
       else if (position.orientation ===  "W") { movingPosition.orientation = "N" } 
     }  
 
-    //Check that the Rover's next location is accessible: within the plateau and not in another Rover's space
-    workingCoordinates.x = movingPosition.xPosition;
-    workingCoordinates.y = movingPosition.yPosition;
+    /*Check that the Rover's next location is accessible within the plateau and not in another Rover's space,
+     * saving the Rover's last position in case it cannot move forward
+     */
+    
+    let previousPosition = currentPosition
 
-    if (coordinatesInRange(workingCoordinates)) /*&& coordinatesUnoccupied(x and y) */ {
+     if ((coordinatesInRange(currentPosition)) && (coordinatesUnoccupied(currentPosition))) {
 
-   //Pass back the Rover's updated position
+      return movingPosition
+    }
 
-   return movingPosition     }
+     //else print a message and go to update.
 
-   //else print a message and go to update.
+    else {print 
+      (`You may not navigate to position ${currentPosition.xPosition,currentPosition.yPosition} on the way to your final position.  You present position ${previousPosition.xPosition,previousPosition.yPosition} will be logged. Permission is denied due to location risk issues.  Please consult Mission Control.`)
+    }
 
-  } 
+    updateLastPosition (currentPosition)
+  
+    } 
 
 
    //Start up the Rover from its initial position 
@@ -74,12 +73,6 @@ export function move (lastPosition: RoverPosition, instructions: string) {
     
     //The Rover's final position is recorded and communicated
     updateLastPosition (movingPosition);
-
-    print
-      (`New position ${movingPosition.xPosition}${movingPosition.yPosition}${movingPosition.orientation} now logged for Rover ID ${movingPosition.Roverid}.\n`)
-
-      //The user can now navigate another Rover or exit.
-      askQuestion(`Enter Y to navigate another Rover or N to close and send data to Mission Control.`, restartOrStop);
 } 
     
   
@@ -90,6 +83,12 @@ function updateLastPosition (position: RoverPosition) {
 
     //Requires betterr errror-handling
     fs.appendFileSync('./Rover_log/position_log.txt', finalPosition);
+
+    print
+    (`New position ${position.xPosition}${position.yPosition}${position.orientation} now logged for Rover ID ${position.Roverid}.\n`)
+
+    //The user can now navigate another Rover or exit.
+    askQuestion(`Enter Y to navigate another Rover or N to close and send data to Mission Control.`, restartOrStop);
 
 }
 

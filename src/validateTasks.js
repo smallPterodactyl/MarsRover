@@ -21,13 +21,13 @@ function validInstructions(userInstructions) {
 }
 exports.validInstructions = validInstructions;
 //No single instruction can allow the Rover to go 'off plateau'
-function coordinatesInRange(workingCoordinates) {
-    return ((workingCoordinates.x >= 0) && (workingCoordinates.x <= plateau.x) &&
-        (workingCoordinates.y >= 0) && (workingCoordinates.y <= plateau.y)) ? true : false;
+function coordinatesInRange(currentPosition) {
+    return ((currentPosition.xPosition >= 0) && (currentPosition.xPosition <= plateau.x) &&
+        (currentPosition.yPosition >= 0) && (currentPosition.yPosition <= plateau.y)) ? true : false;
 }
 exports.coordinatesInRange = coordinatesInRange;
 //This is a stub: it will check the Rover's position against others
-function coordinatesUnoccupied(workingCoordinates) {
+function coordinatesUnoccupied(currentPosition) {
     var otherRoverLocations;
     //if current coordinates are not found in the list,true; else false
     //other Rover coords would be retrieved from the positions file

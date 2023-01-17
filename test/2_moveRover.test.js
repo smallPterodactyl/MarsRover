@@ -1,18 +1,6 @@
-import {
-    move
-   
-   } from "../src/moveRover";
+import {move} from "../src/moveRover";
 
-
-  /* Structure to define error handling */
-  /*test ("throws on errors", () => {
-      function lotsOfErrors () {
-      moveRover (undefined);
-      }
-      expect(lotsOfErrors).toThrow (new Error("oh no"));  
-  }); 
-*/
-
+//Will now need a mock function to work
 
 //Unit tests for central findNextPosition() logic
 describe("move", () => {

@@ -1,4 +1,4 @@
-import { coordinates } from "./moveRover";
+import { RoverPosition } from "./moveRover";
 
 export const activeRovers = ['a1', 'g56'] as const;
 
@@ -29,19 +29,19 @@ export function validInstructions (userInstructions: string) {
 }    
 
 //No single instruction can allow the Rover to go 'off plateau'
-export function coordinatesInRange (workingCoordinates: coordinates) {
+export function coordinatesInRange (currentPosition: RoverPosition) {
 
     return (
-    (workingCoordinates.x >= 0) && (workingCoordinates.x <= plateau.x) &&
-    (workingCoordinates.y >= 0) && (workingCoordinates.y <= plateau.y)
+    (currentPosition.xPosition >= 0) && (currentPosition.xPosition <= plateau.x) &&
+    (currentPosition.yPosition >= 0) && (currentPosition.yPosition <= plateau.y)
     ) ?  true : false
 
 }
 
 //This is a stub: it will check the Rover's position against others
-export function coordinatesUnoccupied (workingCoordinates: coordinates) {
+export function coordinatesUnoccupied (currentPosition: RoverPosition) {
 
-    let otherRoverLocations: coordinates[];
+    let otherRoverLocations: RoverPosition[];
     //if current coordinates are not found in the list,true; else false
     //other Rover coords would be retrieved from the positions file
 

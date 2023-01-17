@@ -8,10 +8,7 @@ var validateTasks_1 = require("./validateTasks");
 ;
 function move(lastPosition, instructions) {
     function findNextPosition(position, instruction) {
-        var workingCoordinates = {
-            x: position.xPosition,
-            y: position.yPosition
-        };
+        var currentPosition = position;
         //Move one point along the same axis
         if (instruction === "M") {
             if (position.orientation === "N") {
@@ -57,14 +54,18 @@ function move(lastPosition, instructions) {
                 movingPosition.orientation = "N";
             }
         }
-        //Check that the Rover's next location is accessible: within the plateau and not in another Rover's space
-        workingCoordinates.x = movingPosition.xPosition;
-        workingCoordinates.y = movingPosition.yPosition;
-        if ((0, validateTasks_1.coordinatesInRange)(workingCoordinates)) /*&& coordinatesUnoccupied(x and y) */ {
-            //Pass back the Rover's updated position
+        /*Check that the Rover's next location is accessible within the plateau and not in another Rover's space,
+         * saving the Rover's last position in case it cannot move forward
+         */
+        var previousPosition = currentPosition;
+        if (((0, validateTasks_1.coordinatesInRange)(currentPosition)) && ((0, validateTasks_1.coordinatesUnoccupied)(currentPosition))) {
             return movingPosition;
         }
         //else print a message and go to update.
+        else {
+            (0, console_1.print)("You may not navigate to position ".concat((currentPosition.xPosition, currentPosition.yPosition), " on the way to your final position.  You present position ").concat((previousPosition.xPosition, previousPosition.yPosition), " will be logged. Permission is denied due to location risk issues.  Please consult Mission Control."));
+        }
+        updateLastPosition(currentPosition);
     }
     //Start up the Rover from its initial position 
     var movingPosition = lastPosition;
@@ -74,15 +75,15 @@ function move(lastPosition, instructions) {
     }
     //The Rover's final position is recorded and communicated
     updateLastPosition(movingPosition);
-    (0, console_1.print)("New position ".concat(movingPosition.xPosition).concat(movingPosition.yPosition).concat(movingPosition.orientation, " now logged for Rover ID ").concat(movingPosition.Roverid, ".\n"));
-    //The user can now navigate another Rover or exit.
-    (0, console_1.askQuestion)("Enter Y to navigate another Rover or N to close and send data to Mission Control.", restartOrStop);
 }
 exports.move = move;
 function updateLastPosition(position) {
     var finalPosition = '\n' + position.Roverid.concat(' ', position.xPosition.toString(), position.yPosition.toString(), position.orientation, ' ', (Date.now() / 1000).toString());
     //Requires betterr errror-handling
     fs.appendFileSync('./Rover_log/position_log.txt', finalPosition);
+    (0, console_1.print)("New position ".concat(position.xPosition).concat(position.yPosition).concat(position.orientation, " now logged for Rover ID ").concat(position.Roverid, ".\n"));
+    //The user can now navigate another Rover or exit.
+    (0, console_1.askQuestion)("Enter Y to navigate another Rover or N to close and send data to Mission Control.", restartOrStop);
 }
 function restartOrStop(decision) {
     if (decision === 'N') {
