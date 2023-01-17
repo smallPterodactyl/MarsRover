@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { initialiseRover } from '..';
 import { clear, print, askQuestion } from '../console';
+import { coordinatesInRange, coordinatesUnoccupied } from './validateTasks';
 
 export interface RoverPosition {
   Roverid: string;
@@ -9,9 +10,19 @@ export interface RoverPosition {
   orientation: string,   
 };
 
+export type coordinates = {
+  x: number;
+  y: number,
+};
+
 export function move (lastPosition: RoverPosition, instructions: string) {
 
   function findNextPosition (position: RoverPosition, instruction: string) {
+
+    let workingCoordinates: coordinates = {
+      x: position.xPosition,
+      y: position.yPosition,
+    }
 
     //Move one point along the same axis
     if (instruction === "M") {
@@ -37,10 +48,19 @@ export function move (lastPosition: RoverPosition, instructions: string) {
       else if (position.orientation ===  "W") { movingPosition.orientation = "N" } 
     }  
 
-   //Pass back the Rover's updated position
-   return movingPosition     
+    //Check that the Rover's next location is accessible: within the plateau and not in another Rover's space
+    workingCoordinates.x = movingPosition.xPosition;
+    workingCoordinates.y = movingPosition.yPosition;
 
-  } //findNextPosition ends here
+    if (coordinatesInRange(workingCoordinates)) /*&& coordinatesUnoccupied(x and y) */ {
+
+   //Pass back the Rover's updated position
+
+   return movingPosition     }
+
+   //else print a message and go to update.
+
+  } 
 
 
    //Start up the Rover from its initial position 
@@ -68,7 +88,7 @@ function updateLastPosition (position: RoverPosition) {
     const finalPosition = '\n' + position.Roverid.concat(' ', position.xPosition.toString(),position.yPosition.toString(),
     position.orientation, ' ', (Date.now()/1000).toString());
 
-    //This is horrible, non-existent error-handling: even considering this operation would never be used in the real word
+    //Requires betterr errror-handling
     fs.appendFileSync('./Rover_log/position_log.txt', finalPosition);
 
 }
@@ -84,5 +104,4 @@ function restartOrStop (decision: string) {
   
   else ;
     
-
 }

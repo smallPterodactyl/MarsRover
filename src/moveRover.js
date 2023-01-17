@@ -4,9 +4,14 @@ exports.move = void 0;
 var fs = require("fs");
 var __1 = require("..");
 var console_1 = require("../console");
+var validateTasks_1 = require("./validateTasks");
 ;
 function move(lastPosition, instructions) {
     function findNextPosition(position, instruction) {
+        var workingCoordinates = {
+            x: position.xPosition,
+            y: position.yPosition
+        };
         //Move one point along the same axis
         if (instruction === "M") {
             if (position.orientation === "N") {
@@ -52,9 +57,15 @@ function move(lastPosition, instructions) {
                 movingPosition.orientation = "N";
             }
         }
-        //Pass back the Rover's updated position
-        return movingPosition;
-    } //findNextPosition ends here
+        //Check that the Rover's next location is accessible: within the plateau and not in another Rover's space
+        workingCoordinates.x = movingPosition.xPosition;
+        workingCoordinates.y = movingPosition.yPosition;
+        if ((0, validateTasks_1.coordinatesInRange)(workingCoordinates)) /*&& coordinatesUnoccupied(x and y) */ {
+            //Pass back the Rover's updated position
+            return movingPosition;
+        }
+        //else print a message and go to update.
+    }
     //Start up the Rover from its initial position 
     var movingPosition = lastPosition;
     for (var i = 0; i < (Array.from(instructions).length); i++) {
@@ -70,7 +81,7 @@ function move(lastPosition, instructions) {
 exports.move = move;
 function updateLastPosition(position) {
     var finalPosition = '\n' + position.Roverid.concat(' ', position.xPosition.toString(), position.yPosition.toString(), position.orientation, ' ', (Date.now() / 1000).toString());
-    //This is horrible, non-existent error-handling: even considering this operation would never be used in the real word
+    //Requires betterr errror-handling
     fs.appendFileSync('./Rover_log/position_log.txt', finalPosition);
 }
 function restartOrStop(decision) {
