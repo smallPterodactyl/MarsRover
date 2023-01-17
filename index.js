@@ -34,7 +34,7 @@ function initialiseRover() {
     function selectRover(ID) {
         if ((0, validateTasks_1.validRoverID)(ID) === undefined) {
             (0, console_1.print)("Invalid or inactive Rover ".concat(ID, " . Enter another ID."));
-            (0, console_1.askQuestion)("Enter the ID of the active Rover that you wish to navigate.   ", selectRover);
+            (0, console_1.askQuestion)("Enter the ID of the Rover that you wish to navigate.   ", selectRover);
         }
         var data = (0, fs_1.readFileSync)('./Rover_log/position_log.txt');
         var RoverData = data.toString().split('\n');
