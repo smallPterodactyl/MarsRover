@@ -1,0 +1,23 @@
+{
+  "name": "move-vehicles",
+  "version": "1.0.0",
+  "description": "Mars Rover Prototype",
+  "main": "",
+  "scripts": {
+    "test": "jest",
+    "eslint": "eslint ./",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "MichelleD",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
+    "babel-jest": "^29.3.1",
+    "install": "^0.13.0",
+    "jest": "^29.3.1",
+    "npm": "^9.2.0"
+  }
+}
